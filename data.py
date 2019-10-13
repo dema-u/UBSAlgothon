@@ -3,7 +3,7 @@ import requests
 import json
 
 RESOURCE_ENDPOINT = "https://dsa-stg-edp-api.fr-nonprod.aws.thomsonreuters.com/data/historical-pricing/beta1/views/summaries/"
-access_token = '26GtCASt7F4X37PrBL1Ml8fcxFwZoCc84afAZThY'
+access_token = 'mYksJ2Kp2e9W7Z2LRD76P7S1stOZEK4k7RjWHU0y'
 
 
 def _get_data_request(url, request_data):
@@ -12,12 +12,11 @@ def _get_data_request(url, request_data):
     if d_resp.status_code != 200:
         print("Unable to get data. Code %s, Message: %s" % (d_resp.status_code, d_resp.text))
     else:
-        print("Data access successful")
         json_resp = json.loads(d_resp.text)
         return json_resp
 
 
-def get_historical_pricing_data(ric, start_date='2017-01-01', end_date='2018-01-01'):
+def get_historical_pricing_data(ric, fields=None, start_date='2017-01-01', end_date='2018-01-01'):
     """
     Helper function to return a dataframe from historical pricing API
     """
@@ -25,13 +24,11 @@ def get_historical_pricing_data(ric, start_date='2017-01-01', end_date='2018-01-
     request_data = {
         "interval": "P1D",
         "start": start_date,
-        "end": end_date
+        "end": end_date,
     }
-
     resource_end_point_ric = RESOURCE_ENDPOINT + ric
 
     json_resp = _get_data_request(resource_end_point_ric, request_data)
-
     ret_value = None
 
     if json_resp is not None:
@@ -43,6 +40,13 @@ def get_historical_pricing_data(ric, start_date='2017-01-01', end_date='2018-01-
         print('no data for RIC={0}'.format(ric))
 
     ret_value.set_index(pd.to_datetime(ret_value['DATE']), inplace=True)
+    ret_value.drop('DATE', axis=1, inplace=True)
     ret_value = ret_value[::-1]
 
+    ### TODO, fix this as its pulling too much data
+    ret_value = pd.DataFrame(ret_value[fields])
+
     return ret_value
+
+def load_data(name):
+    pass

@@ -26,7 +26,7 @@ def get_sharpe_ratio(series, risk_free_rate=0):
 
 
 def get_max_draw_down(series):
-    '''Get draw-down'''
+    '''Get percentage draw-down'''
     draw_down = ((min(series) - max(series))/max(series))*100
     return round(draw_down, 3)
 
