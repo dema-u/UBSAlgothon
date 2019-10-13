@@ -48,5 +48,3 @@ def get_historical_pricing_data(ric, fields=None, start_date='2017-01-01', end_d
 
     return ret_value
 
-def load_data(name):
-    pass
