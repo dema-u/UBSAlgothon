@@ -55,7 +55,7 @@ def print_full_statistics(series):
     ax.plot((series/series[0]))
 
     ax.set_title('% Returns')
-    ax.set_ylabel('Price')
+    ax.set_ylabel('% Return')
     ax.set_xlabel('Date')
 
     return None
